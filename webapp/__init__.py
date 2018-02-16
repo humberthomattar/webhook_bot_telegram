@@ -20,4 +20,4 @@ app.config.from_object('webapp.config.DevelopmentConfig')
 # A importação de módulos de visualizações DEVE SER no final do arquivo para evitar problemas
 # relacionados a importações circulares.
 import webapp.controllers
-import telegram_bot
+import webapp.telegram_bot

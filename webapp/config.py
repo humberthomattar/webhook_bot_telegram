@@ -12,7 +12,7 @@ class BaseConfig(object):
     TESTING = False
     APP_NAME = 'dtp_webhooks'
     VERSION = '0.0.1'
-    PROXY_HABILITADO = False
+    PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_FILENAME = 'webapp/log/log_%s.log' % APP_NAME
     LOG_LEVEL = 'INFO'  # DEBUG OU INFO
 
@@ -25,7 +25,7 @@ class DevelopmentConfig(BaseConfig):
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
     UPTIMEROBOT_TOKEN = os.environ['UPTIMEROBOT_TOKEN']
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
-    PROXY_HABILITADO = True
+    PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO
 
 
@@ -37,5 +37,5 @@ class TestingConfig(BaseConfig):
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
     UPTIMEROBOT_TOKEN = os.environ['UPTIMEROBOT_TOKEN']
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
-    PROXY_HABILITADO = True
+    PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO

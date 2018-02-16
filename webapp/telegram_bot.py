@@ -22,7 +22,7 @@ def inscrever(bot, update):
         else:
             bot.send_message(chat_id=update.message.chat_id, text="Voce ja havia realizado a inscricao!")
     except Exception as e:
-        print str(e)
+        print(str(e))
 
 
 def desinscrever(bot, update):
