@@ -20,8 +20,8 @@ class BaseConfig(object):
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     TESTING = False
-    HOST = '127.0.0.1'
-    PORT = 88
+    HOST = '0.0.0.0'
+    PORT = int(os.environ.get("PORT", 5000))
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
     UPTIMEROBOT_TOKEN = os.environ['UPTIMEROBOT_TOKEN']
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
@@ -32,7 +32,7 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
     DEBUG = False
     TESTING = False
-    HOST = '127.0.0.1'
+    HOST = '0.0.0.0'
     PORT = 88
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
     UPTIMEROBOT_TOKEN = os.environ['UPTIMEROBOT_TOKEN']
