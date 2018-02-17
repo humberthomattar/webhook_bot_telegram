@@ -1,45 +1,56 @@
 import telegram
 import utils
+import json
+from webapp import message_handler
 from webapp import app
 from telegram.ext import Updater, MessageHandler, Filters
 from telegram.ext import CommandHandler
 
-
-def start(bot, update):
-    msg = "Ola!\n"
-    msg += "Como eu poderia ajuda-lo(a)?\n"
-    bot.send_message(chat_id=update.message.chat_id, text=msg)
-    menu(bot, update)
-
-
-def inscrever(bot, update):
+def load_json(file):
+    """
+    :objetivo: Funcao especializada na leitura do arquivo json especificado.
+    :param file: Path do arquivo json que será lido pela aplicação.
+    :return: Dicionario com as chaves e valores do arquivo json.
+    """
     try:
-        chats = utils.load_json('webapp/chats.json')
-        if update.message.chat_id not in chats['chat_id']:
-            chats['chat_id'].append(update.message.chat_id)
-            utils.write_json('webapp/chats.json', chats)
-            bot.send_message(chat_id=update.message.chat_id, text="Sua inscricao foi realizada com sucesso!")
-        else:
-            bot.send_message(chat_id=update.message.chat_id, text="Voce ja havia realizado a inscricao!")
+        with open(file) as data:
+            return json.load(data)
     except Exception as e:
         print(str(e))
 
+def start(bot, update):
+    msg = message_handler.BOT_MSG_START
+    bot.send_message(chat_id=update.message.chat_id, text=msg)
+    menu(bot, update)
 
+def inscrever(bot, update):
+    try:
+        #valid = False
+        chats = load_json('webapp/chats.json')
+        if update.message.chat_id not in chats['chat_id']:
+            chats['chat_id'].append(update.message.chat_id)
+            with open('webapp/chats.json', 'w') as f:
+                json.dump(chats, f)
+            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_OK)
+        else:
+            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_NOK)
+    except Exception as e:
+        print(str(e))
+
+# TODO => Verify why library's Utils attributes 'load_json' and 'write_json' doesn't work on Python 3.X
 def desinscrever(bot, update):
-    chats = utils.load_json('webapp/chats.json')
+    chats = load_json('webapp/chats.json')
     if update.message.chat_id not in chats['chat_id']:
-        bot.send_message(chat_id=update.message.chat_id, text="Voce nao se inscreveu ainda!!")
+        bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_DESINSC_OK)
     else:
         chats['chat_id'].remove(update.message.chat_id)
-        utils.write_json('webapp/chats.json', chats)
-        bot.send_message(chat_id=update.message.chat_id, text="Voce foi removido com sucesso!")
+        with open('webapp/chats.json', 'w') as f:
+            json.dump(chats, f)
+        bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_DESINSC_NOK)
 
 
 def menu(bot, update):
-    msg = 'Essas sao as minhas opcoes disponiveis: \n\n'
-    msg += '/menu - Apresentar novamente essas opcoes\n'
-    msg += '/inscrever - Inscrever na lista de comunicacao\n'
-    msg += '/desinscrever - Remover da lista de comunicacao\n'
+    msg = message_handler.BOT_MSG_MENU
 
     main_menu_keyboard = [[telegram.KeyboardButton('/menu')],
                           [telegram.KeyboardButton('/inscrever')],
@@ -54,7 +65,7 @@ def menu(bot, update):
 
 
 def unknown(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Desculpa, eu nao consegui compreender o comando.")
+    bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_UNKNOWN)
 
 
 # Criacao do objeto updater #

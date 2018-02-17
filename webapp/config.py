@@ -27,6 +27,7 @@ class DevelopmentConfig(BaseConfig):
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO
+    UPTIMEROBOT_URL = ""
 
 
 class TestingConfig(BaseConfig):
