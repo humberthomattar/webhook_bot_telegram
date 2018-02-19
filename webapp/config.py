@@ -23,20 +23,17 @@ class DevelopmentConfig(BaseConfig):
     HOST = '0.0.0.0'
     PORT = int(os.environ.get("PORT", 5000))
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
-    UPTIMEROBOT_TOKEN = os.environ['UPTIMEROBOT_TOKEN']
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO
-    UPTIMEROBOT_URL = ""
 
 
 class TestingConfig(BaseConfig):
     DEBUG = False
     TESTING = False
     HOST = '0.0.0.0'
-    PORT = 88
+    PORT = int(os.environ.get("PORT", 5000))
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
-    UPTIMEROBOT_TOKEN = os.environ['UPTIMEROBOT_TOKEN']
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO

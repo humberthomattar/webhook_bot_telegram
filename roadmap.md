@@ -23,6 +23,6 @@ Relação de necessidades técnicas:
   - Implementar os testes automáticos
   - Build da aplicação somente após passar os testes automáticos
 
-#### Feito
+### Feito
 
   - ~~Remover as mensagens desnecessárias dos retornos de exceção da api~~
