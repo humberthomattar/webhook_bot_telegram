@@ -15,11 +15,10 @@ from webapp import schemas
 from webapp import utils
 
 
-@app.route('/info', methods=['GET'])
+@app.route('/info/', methods=['GET'])
 def info():
     mensagem = {'nome da aplicacao': app.config['APP_NAME'],
                 'versao': app.config['VERSION']}
-    app.logger.info('informacao')
     return json.dumps(mensagem)
 
 
@@ -50,7 +49,7 @@ def uptime_robot_alerts():
 def bad_request(e):
     mensagem = {'status code': 400,
                 'message': 'bad request',
-                'detail': str(e)}
+                }
     return json.dumps(mensagem), 400
 
 
@@ -58,7 +57,7 @@ def bad_request(e):
 def internal_server_error(e):
     mensagem = {'status code': 500,
                 'message': 'internal server error',
-                'detail': str(e)}
+                }
     return json.dumps(mensagem), 500
 
 
@@ -66,5 +65,5 @@ def internal_server_error(e):
 def page_not_found(e):
     mensagem = {'status code': 404,
                 'message': 'page not found',
-                'detail': str(e)}
+                }
     return json.dumps(mensagem), 404
