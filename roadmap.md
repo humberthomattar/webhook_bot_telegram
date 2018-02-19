@@ -19,7 +19,10 @@ Relação de necessidades técnicas:
   - Estruturar a implementação dos logs da aplicação
   - Avaliar a implementação das mensagens
   - Rever as variáveis de ambiente
-  - Remover as mensagens desnecessárias dos retornos de exceção da api
   - Avaliar melhor forma de disparar o bot, juntamente com o webservice (Procfile, imports e Dockerfile e compose)
   - Implementar os testes automáticos
   - Build da aplicação somente após passar os testes automáticos
+
+#### Feito
+
+  - ~~Remover as mensagens desnecessárias dos retornos de exceção da api~~
