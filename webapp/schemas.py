@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # encoding: iso-8859-1
+
 """ Filename:        schemas.py
-    Purpose:         Este arquivo é um agrupamento das regras de validação das requisições
+    Purpose:         Este arquivo e um agrupamento das regras de validação das requisições
                      via web service
     Requirements:    Cerberus
     Author:          Humbertho Mattar
