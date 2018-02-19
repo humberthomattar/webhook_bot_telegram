@@ -23,9 +23,9 @@ def info():
     return json.dumps(mensagem)
 
 
-# TODO: get chat_id in json file and format text message
+# TODO: Definir mensagem de alerta
 @app.route('/uptimeRobotAlerts/', methods=['GET', 'POST'])
-def uptimerobot_alerts():
+def uptime_robot_alerts():
     try:
         v = cerberus.Validator(schemas.uptime_robot_alerts)
         if not v.validate(request.args):

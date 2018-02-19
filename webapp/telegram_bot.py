@@ -13,7 +13,6 @@ def start(bot, update):
 
 def inscrever(bot, update):
     try:
-        #valid = False
         chats = utils.load_json('webapp/chats.json')
         if update.message.chat_id not in chats['chat_id']:
             chats['chat_id'].append(update.message.chat_id)
