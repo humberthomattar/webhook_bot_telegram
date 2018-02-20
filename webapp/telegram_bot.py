@@ -111,7 +111,7 @@ def getInfoMonitor(**kwargs):
                     msg += 'Status: ONLINE \n'
                 else:
                     msg += 'Status: OFFLINE \n'
-                msg += 'Desde: %s \n' % (datetime.datetime.fromtimestamp(int(m.get('logs')[0].get('datetime'))))
+                msg += 'Desde: %s \n' % (datetime.datetime.fromtimestamp(int(m.get('logs')[0].get('datetime'))).strftime('%d-%m-%Y %H:%M:%S'))
                 msg += '***************************************** \n'
 
             return msg
