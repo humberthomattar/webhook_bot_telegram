@@ -1,18 +1,25 @@
 import unittest
-import webapp
+from flask_testing import TestCase
+import os
+import sys
 
+topdir = os.path.join(os.path.dirname(__file__), "..")
+sys.path.append(topdir)
 
-class ControllerTestCase(unittest.TestCase):
+class ControllersTest(TestCase):
 
-    def setUp(self):
-        webapp.app.config.from_object('webapp.config.DevelopmentConfig')
-        webapp.app.testing = True
-        self.app = webapp.app.test_client()
-        return
+    def create_app(self):
+        from webapp import app
+        app.config.testing = True
+        self.app = app.test_client()
+        return app
 
-#    def tearDown(self):
-#        return
+    def test_asset_info(self):
+        response = self.client.get('/info/')
+        assert b'versao' in response.data
+        self.assert200(response)
 
+"""
     def test_index(self):
         req = self.app.get('/')
         assert req.status_code == 404
@@ -42,6 +49,6 @@ class ControllerTestCase(unittest.TestCase):
         assert req.status_code == 400
         assert b"bad request" in req.data
 
-
+"""
 if __name__ == '__main__':
     unittest.main()
