@@ -108,4 +108,4 @@ ENV/
 .pytest_cache/
 
 # json files
-*.json
+.json
