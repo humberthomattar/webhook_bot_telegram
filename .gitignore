@@ -106,3 +106,6 @@ ENV/
 
 # pytest
 .pytest_cache/
+
+# json files
+*.json
