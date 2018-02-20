@@ -25,6 +25,7 @@ def info():
 # TODO: Definir mensagem de alerta
 @app.route('/uptimeRobotAlerts/', methods=['GET', 'POST'])
 def uptime_robot_alerts():
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     try:
         v = cerberus.Validator(schemas.uptime_robot_alerts)
         if not v.validate(request.args):
@@ -36,7 +37,7 @@ def uptime_robot_alerts():
             text += 'Isso e uma mensagem'
             chats = utils.load_json('webapp/chats.json')
             for chat_id in chats['chat_id']:
-                req = utils.post_with_query_string(url=url, params={'chat_id': chat_id, 'text': text})
+                req = utils.post_with_query_string(url=url, data={'chat_id': chat_id, 'text': text},headers=headers)
                 app.logger.info(req.text)
             return 'OK', 200
     except Exception as e:

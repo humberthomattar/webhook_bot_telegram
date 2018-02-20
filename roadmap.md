@@ -15,6 +15,7 @@ Relação de necessidades funcionais e não-funcionais:
 
 Relação de necessidades técnicas:
 
+  - Implementar o menu com todos os monitores cadastrados no uptime
   - Separar as mensagens de down e up, das mensagens de ssl
   - Estruturar a implementação dos logs da aplicação
   - Avaliar a implementação das mensagens

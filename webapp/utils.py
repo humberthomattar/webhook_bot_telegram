@@ -55,13 +55,13 @@ def post_with_query_string(**kwargs):
 
             return requests.post(kwargs['url'],
                                  proxies=proxies,
-                                 params=kwargs['params'],
-                                 headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                                 data=kwargs['params'],
+                                 headers=kwargs['headers'],
                                  timeout=30)
         else:
             return requests.post(kwargs['url'],
-                                 params=kwargs['params'],
-                                 headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                                 data=kwargs['params'],
+                                 headers=kwargs['headers'],
                                  timeout=30)
     except Exception as e:
         return '[FATAL ERROR]: ' + str(e)
