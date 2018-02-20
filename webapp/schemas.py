@@ -37,6 +37,14 @@ uptime_robot_alerts = {
                 'type': 'string',
                 'required': False
             },
+            'alertDateTime': {
+                'type': 'string',
+                'required': False
+            },
+            'alertFriendlyDuration': {
+                'type': 'string',
+                'required': False
+            },
             'alertDetails': {
                 'type': 'string',
                 'required': False
