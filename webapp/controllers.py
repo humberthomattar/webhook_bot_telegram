@@ -13,6 +13,7 @@ from flask import abort
 from webapp import app
 from webapp import schemas
 from webapp import utils
+import datetime
 
 
 @app.route('/info/', methods=['GET'])
@@ -34,14 +35,19 @@ def uptime_robot_alerts():
         else:
             url = 'https://api.telegram.org/bot%s/sendMessage' % (app.config['TELEGRAM_TOKEN'])
             text = 'DTP_MONITOR :: Informa\n'
-            text += 'Isso e uma mensagem'
+            text += 'Sistema: %s\n' % request.args['monitorFriendlyName']
+            text += 'URL: %s\n' % request.args['monitorURL']
+            text += 'Status atual: %s\n' % request.args['alertTypeFriendlyName'].upper()
+            text += 'Desde de: %s\n' % datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+            text += 'Obs: Você será informado quando o sistema estiver ONLINE'
+
             chats = utils.load_json('webapp/chats.json')
             for chat_id in chats['chat_id']:
-                req = utils.post_with_query_string(url=url, data={'chat_id': chat_id, 'text': text},headers=headers)
+                req = utils.post_with_query_string(url=url, params={'chat_id': chat_id, 'text': text},headers=headers)
                 app.logger.info(req.text)
             return 'OK', 200
     except Exception as e:
-        app.logger.error('uptimeRobotAlerts - Não foi possevel enviar a mensagem.')
+        app.logger.error('uptimeRobotAlerts - Não foi possivel enviar a mensagem.')
         app.logger.error(str(e))
         abort(400)
 
