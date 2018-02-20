@@ -12,4 +12,4 @@ before_install:
 after_script:
   - pep8 --statistics --count --show-pep8 webapp/
 script:
-  - pytest test/
+  - py.test
