@@ -6,8 +6,7 @@ from telegram.ext import Updater, MessageHandler, Filters
 from telegram.ext import CommandHandler
 from webapp import uptime_connect
 import json
-
-global monitors
+import datetime
 
 def start(bot, update):
     msg = message_handler.BOT_MSG_START
@@ -39,14 +38,11 @@ def desinscrever(bot, update):
 
 def menu_principal(bot, update):
     msg = message_handler.BOT_MSG_MENU
-    #global monitors
-    #monitors = getListaMonitores()
-    #for m in monitors['monitors']:
-    #    msg+= "/%s \n" % m['friendly_name']
 
     main_menu_keyboard = [[telegram.KeyboardButton('/menu')],
                           [telegram.KeyboardButton('/inscrever')],
-                          [telegram.KeyboardButton('/desinscrever')]]
+                          [telegram.KeyboardButton('/desinscrever')],
+                          [telegram.KeyboardButton('/sistemas')]]
 
     reply_kb_markup = telegram.ReplyKeyboardMarkup(main_menu_keyboard,
                                                    resize_keyboard=True,
@@ -58,8 +54,8 @@ def menu_principal(bot, update):
 def menu_sistemas(bot, update):
     msg = message_handler.BOT_MSG_MENU_SISTEMAS
 
-    global monitors
     monitors = getListaMonitores()
+    utils.write_json('webapp/sistemas.json', monitors)
 
     for m in monitors['monitors']:
         msg+= "/%s \n" % m['friendly_name']
@@ -69,20 +65,61 @@ def menu_sistemas(bot, update):
 
 
 def unknown(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_UNKNOWN)
+    try:
+        found = False
+        msg = update.message.text.lstrip('/')
+        file = utils.load_json('webapp/sistemas.json')
+
+        for monitors in file['monitors']:
+            if msg == monitors['friendly_name']:
+                found = True
+                bot.send_message(chat_id=update.message.chat_id,text=getInfoMonitor(id=monitors['id']))
+
+        if not found:
+            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_UNKNOWN)
+
+    except Exception as e:
+        print('Unknown funciontion: %s' % e)
 
 def getListaMonitores(**kwargs):
     try:
+
         res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT, params=uptime_connect.PAYLOAD, headers=uptime_connect.HEADERS)
         if (res.status_code == 200):
             parsed_json = json.loads(res.text)
             return parsed_json
-            #return parsed_json.get('monitors')
         else:
             print(res.text)
 
     except Exception as ex:
         print(ex)
+
+def getInfoMonitor(**kwargs):
+    try:
+        msg = ""
+        payload = uptime_connect.PAYLOAD + '&monitors=%s' % kwargs['id']
+        res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT, params=payload, headers=uptime_connect.HEADERS)
+
+        if (res.status_code == 200):
+            parsed_json = json.loads(res.text)
+
+            for m in parsed_json['monitors']:
+                msg = '****************************************** \n'
+                msg += 'Sistema: %s \n' % (m['friendly_name'])
+                msg += 'URL: %s \n' % (m['url'])
+                if m.get('logs')[0].get('type') == 2:
+                    msg += 'Status: ONLINE \n'
+                else:
+                    msg += 'Status: OFFLINE \n'
+                msg += 'Desde: %s \n' % (datetime.datetime.fromtimestamp(int(m.get('logs')[0].get('datetime'))))
+                msg += '***************************************** \n'
+
+            return msg
+        else:
+            print('Retorno indevido do UptimeRobot. Detalhamento: %s' % res.text)
+
+    except Exception as ex:
+        print('Problema na conexão com o UptimeRobot para busca de Informações do Monitor. Detalhamento: %s ' % ex)
 
 # Criacao do objeto updater #
 if app.config['PROXY_HABILITADO']:
@@ -95,9 +132,9 @@ dispatcher = updater.dispatcher
 # Criacao dos objetos de comando #
 start_handler = CommandHandler('start', start)
 menu_principal_handler = CommandHandler('menu', menu_principal)
-menu_sistemas_handler = CommandHandler('sistemas', menu_sistemas)
 inscrever_handler = CommandHandler('inscrever', inscrever)
 desinscrever_handler = CommandHandler('desinscrever', desinscrever)
+menu_sistemas_handler = CommandHandler('sistemas', menu_sistemas)
 unknown_handler = MessageHandler(Filters.command, unknown)
 
 
