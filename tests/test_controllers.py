@@ -1,5 +1,6 @@
 import unittest
 import webapp
+from flask import url_for
 
 class ControllerTestCase(unittest.TestCase):
 
@@ -12,10 +13,19 @@ class ControllerTestCase(unittest.TestCase):
     def tearDown(self):
         return
 
-    def test_return_default_info(self):
-        text = '{"versao": "%s", "nome da aplicacao": "%s"}' % (webapp.app.config['APP_NAME'], webapp.app.config['VERSION'])
-        req = self.app.get('/')
-        assert b'{"versao": "%s", "nome da aplicacao": "%s"}' % (webapp.app.config['APP_NAME'], webapp.app.config['VERSION']) in req.data
+    def test_info_status_code(self):
+        req = self.app.get('/info/')
+        assert req.status_code == 200
+        assert b"versao" in req.data
+
+    def test_info_status_code_without_ends(self):
+        req = self.app.get('/info')
+        assert req.status_code == 301
+
+    def test_info_status_code_with_params(self):
+        req = self.app.get('/info/?teste=1')
+        assert req.status_code == 200
+        assert b"versao" in req.data
 
 
 if __name__ == '__main__':
