@@ -8,8 +8,8 @@ cache: pip
 install:
   - pip install -r requirements.txt
 before_install:
-  - pip install pep8
-before_script:
+  - pip install pep8 pytest
+after_script:
   - pep8 --statistics --count --show-pep8 webapp/
 script:
   - pytest test/
