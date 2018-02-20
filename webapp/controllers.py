@@ -40,7 +40,6 @@ def uptime_robot_alerts():
             text += 'URL: %s\n' % request.args['monitorURL']
             text += 'Status atual: %s\n' % request.args['alertTypeFriendlyName'].upper()
             text += 'Desde de: %s\n' % datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
-            text += 'Obs: Você será informado quando o sistema estiver ONLINE'
 
             chats = utils.load_json('webapp/chats.json')
             for chat_id in chats['chat_id']:
