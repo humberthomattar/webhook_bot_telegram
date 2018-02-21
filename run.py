@@ -6,6 +6,7 @@
     Author:       Humbertho Mattar
 """
 from webapp import app
+import webapp.telegram_bot
 import sys
 
 
