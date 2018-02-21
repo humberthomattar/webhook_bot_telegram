@@ -1,5 +1,4 @@
 from flask_testing import TestCase
-import pytest
 import unittest
 import os
 import sys
@@ -7,7 +6,9 @@ import sys
 top_dir = os.path.join(os.path.dirname(__file__), "..")
 sys.path.append(top_dir)
 
+# noinspection PyPep8
 from webapp import app
+
 
 class ControllersTest(TestCase):
     def create_app(self):
@@ -16,6 +17,11 @@ class ControllersTest(TestCase):
 
     def test_index(self):
         req = self.client.get('/')
+        assert req.status_code == 404
+        assert b"not found" in req.data
+
+    def test_index_with_params(self):
+        req = self.client.get('/?teste=1')
         assert req.status_code == 404
         assert b"not found" in req.data
 
@@ -29,7 +35,7 @@ class ControllersTest(TestCase):
         assert req.status_code == 200
         assert b"versao" in req.data
 
-    def test_info_status_code_without_params(self):
+    def test_info_redirect(self):
         req = self.client.get('/info')
         assert req.status_code == 301
 
@@ -38,11 +44,20 @@ class ControllersTest(TestCase):
         assert req.status_code == 200
         assert b"versao" in req.data
 
-    def test_uptimeRobotAlerts_status_code_without_params(self):
+    def test_uptimeRobotAlerts_without_params(self):
+        req = self.client.get('/uptimeRobotAlerts/')
+        assert req.status_code == 400
+        assert b"bad request" in req.data
+
+    def test_uptimeRobotAlerts_redirect(self):
+        req = self.client.get('/uptimeRobotAlerts')
+        assert req.status_code == 301
+
+    def test_uptimeRobotAlerts_without_params(self):
         req = self.client.get('/uptimeRobotAlerts/')
         assert req.status_code == 400
         assert b"bad request" in req.data
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=3)
+    unittest.main(verbosity=2)
