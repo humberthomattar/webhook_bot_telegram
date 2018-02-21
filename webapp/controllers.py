@@ -16,7 +16,7 @@ from webapp import utils
 import datetime
 
 
-@app.route('/info/', methods=['GET'])
+@app.route('/info/', methods=['GET', 'HEAD'])
 def info():
 
     mensagem = {'nome da aplicacao': app.config['APP_NAME'],
