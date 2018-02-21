@@ -35,11 +35,15 @@ def uptime_robot_alerts():
             abort(400)
         else:
             url = 'https://api.telegram.org/bot%s/sendMessage' % (app.config['TELEGRAM_TOKEN'])
-            text = 'DTP_MONITOR :: Informa\n'
+            text = 'DTP_MONITOR :: Informa\n\n'
             text += 'Sistema: %s\n' % request.args['monitorFriendlyName']
             text += 'URL: %s\n' % request.args['monitorURL']
-            text += 'Status atual: %s\n' % request.args['alertTypeFriendlyName'].upper()
-            text += 'Desde de: %s\n' % datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+            if request.args['alertType'] == '1':
+                text += 'Status atual: OFFLINE\n'
+            else:
+                text += 'Status atual: ONLINE\n'
+            text += 'Desde de: %s\n' % datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            text += 'Detalhes: %s' % request.args['alertDetails'].upper()
 
             chats = utils.load_json('webapp/chats.json')
             for chat_id in chats['chat_id']:
