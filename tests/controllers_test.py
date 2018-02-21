@@ -6,6 +6,7 @@ import sys
 top_dir = os.path.join(os.path.dirname(__file__), "..")
 sys.path.append(top_dir)
 
+# noinspection PyPep8
 from webapp import app
 
 

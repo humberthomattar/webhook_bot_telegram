@@ -11,13 +11,11 @@ from flask import Flask
 
 app = Flask(__name__)
 
-
 # configurações externalizadas - classes de conf/config.py
 app.config.from_object('webapp.config.DevelopmentConfig')
 
 
-
 # A importação de módulos de visualizações DEVE SER no final do arquivo para evitar problemas
 # relacionados a importações circulares.
+# noinspection PyPep8
 import webapp.controllers
-#import webapp.telegram_bot

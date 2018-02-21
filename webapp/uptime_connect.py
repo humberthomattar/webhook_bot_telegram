@@ -74,7 +74,8 @@ FORMAT = "json"
                  Should be set to 1 for getting them. 
                  Default is 0)
     - response_times_limit - optional (the number of response time logs to be returned (descending order). 
-                 If empty, last 24 hours of logs are returned (if response_times_start_date and response_times_end_date are not used).
+                 If empty, last 24 hours of logs are returned (if response_times_start_date and response_times_end_date
+                  are not used).
     - response_times_average - optional (by default, response time value of each check is returned. 
                  The API can return average values in given minutes. Default is 0. For ex: the Uptime Robot 
                  dashboard displays the data averaged/grouped in 30 minutes)

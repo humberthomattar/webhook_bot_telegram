@@ -41,8 +41,8 @@ def post_with_query_string(**kwargs):
 
             t = utils.post_with_query_string(url=url, params=params)
 
-    :param kwargs['url']: Endereço da API/ metodo POST que será consumido.
-    :param kwargs['params']: params é um dicionário com chave e valor, utilizada na query string.
+    :param:  Endereço da API/ metodo POST que será consumido.
+    :param: params: params é um dicionário com chave e valor, utilizada na query string.
     :return: Retorna o objeto request com seus atributos.
     """
     try:
