@@ -8,10 +8,12 @@ from webapp import uptime_connect
 import json
 import datetime
 
+
 def start(bot, update):
     msg = message_handler.BOT_MSG_START
     bot.send_message(chat_id=update.message.chat_id, text=msg)
     menu_principal(bot, update)
+
 
 def inscrever(bot, update):
     try:
@@ -51,14 +53,15 @@ def menu_principal(bot, update):
                      text=msg,
                      reply_markup=reply_kb_markup)
 
+
 def menu_sistemas(bot, update):
     msg = message_handler.BOT_MSG_MENU_SISTEMAS
 
-    monitors = getListaMonitores()
+    monitors = get_lista_monitores()
     utils.write_json('webapp/sistemas.json', monitors)
 
     for m in monitors['monitors']:
-        msg+= "/%s \n" % m['friendly_name']
+        msg += "/%s \n" % m['friendly_name']
 
     bot.send_message(chat_id=update.message.chat_id,
                      text=msg)
@@ -73,19 +76,20 @@ def unknown(bot, update):
         for monitors in file['monitors']:
             if msg == monitors['friendly_name']:
                 found = True
-                bot.send_message(chat_id=update.message.chat_id,text=getInfoMonitor(id=monitors['id']))
+                bot.send_message(chat_id=update.message.chat_id, text=get_info_monitor(id=monitors['id']))
 
         if not found:
             bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_UNKNOWN)
 
     except Exception as e:
-        print('Unknown funciontion: %s' % e)
+        print(e)
 
-def getListaMonitores(**kwargs):
+
+def get_lista_monitores():
     try:
-
-        res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT, params=uptime_connect.PAYLOAD, headers=uptime_connect.HEADERS)
-        if (res.status_code == 200):
+        res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT, params=uptime_connect.PAYLOAD,
+                                           headers=uptime_connect.HEADERS)
+        if res.status_code == 200:
             parsed_json = json.loads(res.text)
             return parsed_json
         else:
@@ -94,13 +98,14 @@ def getListaMonitores(**kwargs):
     except Exception as ex:
         print(ex)
 
-def getInfoMonitor(**kwargs):
+
+def get_info_monitor(**kwargs):
     try:
         msg = ""
         payload = uptime_connect.PAYLOAD + '&monitors=%s' % kwargs['id']
-        res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT, params=payload, headers=uptime_connect.HEADERS)
-
-        if (res.status_code == 200):
+        res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT,
+                                           params=payload, headers=uptime_connect.HEADERS)
+        if res.status_code == 200:
             parsed_json = json.loads(res.text)
 
             for m in parsed_json['monitors']:
@@ -111,7 +116,9 @@ def getInfoMonitor(**kwargs):
                     msg += 'Status: ONLINE \n'
                 else:
                     msg += 'Status: OFFLINE \n'
-                msg += 'Desde: %s \n' % (datetime.datetime.fromtimestamp(int(m.get('logs')[0].get('datetime'))).strftime('%d-%m-%Y %H:%M:%S'))
+                msg += 'Desde: %s \n' % \
+                    (datetime.datetime.fromtimestamp(int(m.get('logs')[0].get('datetime')))
+                     .strftime('%d-%m-%Y %H:%M:%S'))
                 msg += '***************************************** \n'
 
             return msg
@@ -121,11 +128,13 @@ def getInfoMonitor(**kwargs):
     except Exception as ex:
         print('Problema na conexão com o UptimeRobot para busca de Informações do Monitor. Detalhamento: %s ' % ex)
 
+
 # Criacao do objeto updater #
 if app.config['PROXY_HABILITADO']:
     updater = Updater(token=app.config['TELEGRAM_TOKEN'], request_kwargs={'proxy_url': app.config['PROXY_ADRESS']})
 else:
     updater = Updater(token=app.config['TELEGRAM_TOKEN'])
+
 dispatcher = updater.dispatcher
 
 
@@ -147,4 +156,3 @@ dispatcher.add_handler(desinscrever_handler)
 dispatcher.add_handler(unknown_handler)
 
 updater.start_polling()
-
