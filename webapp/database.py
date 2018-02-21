@@ -2,6 +2,7 @@ from urllib import parse
 import psycopg2
 from webapp import app
 
+
 def connect_bd():
     parse.uses_netloc.append('postgres')
     url = parse.urlparse(app.config['DATABASE_URL'])
@@ -63,8 +64,8 @@ def insert_chat(**kwargs):
         cursor = conn.cursor()
         cursor.execute("INSERT INTO chat (id, type, username, first_name, last_name) "
                        "VALUES (%s,'%s','%s','%s','%s')" % (kwargs['chat_id'], kwargs['type'],
-                                                    kwargs['username'],kwargs['first_name'],
-                                                    kwargs['last_name']))
+                                                            kwargs['username'], kwargs['first_name'],
+                                                            kwargs['last_name']))
 
         if cursor.rowcount != 0:
             conn.commit()

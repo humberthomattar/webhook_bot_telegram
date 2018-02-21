@@ -46,7 +46,6 @@ def uptime_robot_alerts():
             text += 'Desde de: %s\n' % datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
             text += 'Detalhes: %s' % request.args['alertDetails'].upper()
 
-            #chats = utils.load_json('webapp/chats.json')
             rows = database.search_chats()
             if rows:
                 for row in rows:
@@ -62,7 +61,7 @@ def uptime_robot_alerts():
 
 
 @app.errorhandler(400)
-def bad_request(e):
+def bad_request():
     mensagem = {'status code': 400,
                 'message': 'bad request'
                 }
@@ -70,7 +69,7 @@ def bad_request(e):
 
 
 @app.errorhandler(500)
-def internal_server_error(e):
+def internal_server_error():
     mensagem = {'status code': 500,
                 'message': 'internal server error'
                 }
@@ -78,7 +77,7 @@ def internal_server_error(e):
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found():
     mensagem = {'status code': 404,
                 'message': 'page not found'
                 }

@@ -21,7 +21,7 @@ def inscrever(bot, update):
         if not database.search_chat_id(chat_id=update.message.chat_id):
             chats = bot.getChat(update.message.chat_id)
             if database.insert_chat(chat_id=chats['id'], type=chats['type'], username=chats['username'],
-                        first_name=chats['first_name'], last_name=chats['last_name']):
+                                    first_name=chats['first_name'], last_name=chats['last_name']):
                 bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_OK)
             else:
                 bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_ERRO)
