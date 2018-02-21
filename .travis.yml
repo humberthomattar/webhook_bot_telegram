@@ -8,8 +8,8 @@ cache: pip
 install:
   - pip install -r requirements.txt
 before_install:
-  - pip install codestyle pytest Flask-Testing
+  - pip install pep8 pytest Flask-Testing
 script:
   - py.test
 before_script:
-  - codestyle --statistics --count webapp/
+  - pep8 --statistics --count webapp/
