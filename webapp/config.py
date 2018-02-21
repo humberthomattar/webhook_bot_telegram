@@ -22,7 +22,7 @@ class BaseConfig(object):
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     TESTING = False
-    HOST = '127.0.0.1'
+    HOST = '0.0.0.0'
     PORT = int(os.environ.get("PORT", 5000))
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
     PROXY_ADRESS = os.environ['PROXY_ADRESS']

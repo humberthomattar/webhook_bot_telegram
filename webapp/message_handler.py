@@ -1,5 +1,4 @@
 # encoding: iso-8859-1
-<<<<<<< HEAD
 BOT_MSG_START = "Olá! Por favor, escolha uma das opções abaixo:\n"
 BOT_MSG_UNKNOWN = "Desculpe, não entendi o seu comando. Pode repetir?"
 BOT_MSG_HELP = ""
