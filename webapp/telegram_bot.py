@@ -2,6 +2,7 @@ import telegram
 from webapp import utils
 from webapp import message_handler
 from webapp import app
+from webapp import database
 from telegram.ext import Updater, MessageHandler, Filters
 from telegram.ext import CommandHandler
 from webapp import uptime_connect
@@ -17,25 +18,55 @@ def start(bot, update):
 
 def inscrever(bot, update):
     try:
-        chats = utils.load_json('webapp/chats.json')
-        if update.message.chat_id not in chats['chat_id']:
-            chats['chat_id'].append(update.message.chat_id)
-            utils.write_json('webapp/chats.json', chats)
-            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_OK)
+        if not database.search_chat_id(chat_id=update.message.chat_id):
+            chats = bot.getChat(update.message.chat_id)
+            if database.insert_chat(chat_id=chats['id'], type=chats['type'], username=chats['username'],
+                        first_name=chats['first_name'], last_name=chats['last_name']):
+                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_OK)
+            else:
+                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_ERRO)
+
         else:
-            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_NOK)
+            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_NOK)
+
+        # chats = utils.load_json('webapp/chats.json')
+        # if update.message.chat_id not in chats['chat_id']:
+        #     chats['chat_id'].append(update.message.chat_id)
+        #     utils.write_json('webapp/chats.json', chats)
+        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_OK)
+        # else:
+        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_NOK)
     except Exception as e:
         print(str(e))
 
 
 def desinscrever(bot, update):
-    chats = utils.load_json('webapp/chats.json')
-    if update.message.chat_id not in chats['chat_id']:
-        bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_DESINSC_OK)
-    else:
-        chats['chat_id'].remove(update.message.chat_id)
-        utils.write_json('webapp/chats.json', chats)
-        bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_DESINSC_NOK)
+    try:
+        if database.search_chat_id(chat_id=update.message.chat_id):
+            if database.remove_chat(chat_id=update.message.chat_id):
+                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_OK)
+            else:
+                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_ERRO)
+        else:
+            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_NOK)
+
+        # chats = utils.load_json('webapp/chats.json')
+        # if update.message.chat_id not in chats['chat_id']:
+        #     chats['chat_id'].append(update.message.chat_id)
+        #     utils.write_json('webapp/chats.json', chats)
+        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_OK)
+        # else:
+        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_NOK)
+    except Exception as e:
+        print(str(e))
+
+    # chats = utils.load_json('webapp/chats.json')
+    # if update.message.chat_id not in chats['chat_id']:
+    #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_OK)
+    # else:
+    #     chats['chat_id'].remove(update.message.chat_id)
+    #     utils.write_json('webapp/chats.json', chats)
+    #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_NOK)
 
 
 def menu_principal(bot, update):

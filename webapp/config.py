@@ -15,17 +15,19 @@ class BaseConfig(object):
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_FILENAME = 'webapp/log/log_%s.log' % APP_NAME
     LOG_LEVEL = 'INFO'  # DEBUG OU INFO
+    DATABASE_URL = os.environ['DATABASE_URL']
 
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     TESTING = False
-    HOST = '0.0.0.0'
+    HOST = '127.0.0.1'
     PORT = int(os.environ.get("PORT", 5000))
     TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO
+    DATABASE_URL = os.environ['DATABASE_URL']
 
 
 class TestingConfig(BaseConfig):
@@ -37,3 +39,4 @@ class TestingConfig(BaseConfig):
     PROXY_ADRESS = os.environ['PROXY_ADRESS']
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO
+    DATABASE_URL = os.environ['DATABASE_URL']

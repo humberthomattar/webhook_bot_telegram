@@ -13,6 +13,7 @@ from flask import abort
 from webapp import app
 from webapp import schemas
 from webapp import utils
+from webapp import database
 import datetime
 
 
@@ -45,11 +46,15 @@ def uptime_robot_alerts():
             text += 'Desde de: %s\n' % datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
             text += 'Detalhes: %s' % request.args['alertDetails'].upper()
 
-            chats = utils.load_json('webapp/chats.json')
-            for chat_id in chats['chat_id']:
-                req = utils.post_with_query_string(url=url, params={'chat_id': chat_id, 'text': text}, headers=headers)
-                app.logger.info(req.text)
-            return 'OK', 200
+            #chats = utils.load_json('webapp/chats.json')
+            rows = database.search_chats()
+            if rows:
+                for row in rows:
+                    req = utils.post_with_query_string(url=url, params={'chat_id': row, 'text': text}, headers=headers)
+                    app.logger.info(req.text)
+                return 'OK', 200
+            else:
+                return 'OK', 204
     except Exception as e:
         app.logger.error('uptimeRobotAlerts - Não foi possivel enviar a mensagem.')
         app.logger.error(str(e))
