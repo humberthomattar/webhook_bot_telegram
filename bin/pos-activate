@@ -20,6 +20,7 @@ export UPTIMEROBOT_TOKEN=<valor>
 export TELEGRAM_TOKEN=<valor>
 export PROXY_ADRESS=<valor>
 export PROXY_HABILITADO=<valor>
+export DATABASE_URL=<valor>
 
 print_info "Variaveis definidas."
 
