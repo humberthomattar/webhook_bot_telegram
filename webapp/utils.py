@@ -11,7 +11,10 @@ def write_json(file, data):
         with open(file, 'w') as outfile:
             json.dump(data, outfile)
     except Exception as e:
-        app.logger.error('Não foi possível gravar no arquivos json as informações desejadas.')
+        app.logger.error(
+            'Não foi possível gravar no arquivos \
+            json as informações desejadas.'
+        )
         app.logger.error(str(e))
 
 
@@ -25,14 +28,18 @@ def load_json(file):
         with open(file) as data:
             return json.load(data)
     except Exception as e:
-        print('>> Erro no parser das configurações!! - Detalhamento: ' + str(e))
+        app.logger.error(
+            'Erro no parser das configurações!! - Detalhamento: ' + str(e)
+        )
 
 
 def post_with_query_string(**kwargs):
     """ Realizar a chamada REST - POST via módulo requests utilizando query string.
 
     :usage:
-            t = utils.post_with_query_string(url=url, params={'key1': int1, 'key2': value2})
+            t = utils.post_with_query_string(
+                      url=url, params={'key1': int1, 'key2': value2}
+            )
             OR
             params = {
                         'key_1': value_1,
@@ -42,7 +49,7 @@ def post_with_query_string(**kwargs):
             t = utils.post_with_query_string(url=url, params=params)
 
     :param:  Endereço da API/ metodo POST que será consumido.
-    :param: params: params é um dicionário com chave e valor, utilizada na query string.
+    :param: params: params é uma dict utilizada na query string.
     :return: Retorna o objeto request com seus atributos.
     """
     try:

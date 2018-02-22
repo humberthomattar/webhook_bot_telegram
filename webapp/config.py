@@ -1,7 +1,11 @@
+#!/usr/bin/python
 # encoding: iso-8859-1
+
 """ Filename:     config.py
-    Purpose:      Este arquivo  externaliza as configurações da aplicação. Separando os ambientes por classes
-                  BaseConfig = PRODUCAO - as demais classes herdam e sobreescrem os atributos de produção..
+    Purpose:      Este arquivo  externaliza as configuracoes da aplicacao.
+                  Separando os ambientes por classes
+                  BaseConfig = PRODUCAO - as demais classes herdam e
+                  sobreescrem os atributos de PRODUCAO..
     Requirements:
     Author:       humbertho mattar
 """

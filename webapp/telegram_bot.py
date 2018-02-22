@@ -20,22 +20,37 @@ def inscrever(bot, update):
     try:
         if not database.search_chat_id(chat_id=update.message.chat_id):
             chats = bot.getChat(update.message.chat_id)
-            if database.insert_chat(chat_id=chats['id'], type=chats['type'], username=chats['username'],
-                                    first_name=chats['first_name'], last_name=chats['last_name']):
-                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_OK)
+            if database.insert_chat(
+                chat_id=chats['id'], type=chats['type'],
+                username=chats['username'], first_name=chats['first_name'],
+                last_name=chats['last_name']
+            ):
+                bot.send_message(
+                    chat_id=update.message.chat_id,
+                    text=message_handler.BOT_MSG_INSC_OK
+                )
             else:
-                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_ERRO)
+                bot.send_message(
+                    chat_id=update.message.chat_id,
+                    text=message_handler.BOT_MSG_INSC_ERRO
+                )
 
         else:
-            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_INSC_NOK)
+            bot.send_message(
+                chat_id=update.message.chat_id,
+                text=message_handler.BOT_MSG_INSC_NOK
+            )
 
         # chats = utils.load_json('webapp/chats.json')
         # if update.message.chat_id not in chats['chat_id']:
         #     chats['chat_id'].append(update.message.chat_id)
         #     utils.write_json('webapp/chats.json', chats)
-        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_OK)
+        #     bot.send_message(chat_id=update.message.chat_id,
+        #       text=message_handler.BOT_MSG_JSON_INSC_OK)
         # else:
-        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_NOK)
+        #     bot.send_message(chat_id=update.message.chat_id,
+        #       text=message_handler.BOT_MSG_JSON_INSC_NOK)
+
     except Exception as e:
         print(str(e))
 
@@ -44,29 +59,43 @@ def desinscrever(bot, update):
     try:
         if database.search_chat_id(chat_id=update.message.chat_id):
             if database.remove_chat(chat_id=update.message.chat_id):
-                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_OK)
+                bot.send_message(
+                    chat_id=update.message.chat_id,
+                    text=message_handler.BOT_MSG_DESINSC_OK
+                )
             else:
-                bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_ERRO)
+                bot.send_message(
+                    chat_id=update.message.chat_id,
+                    text=message_handler.BOT_MSG_DESINSC_ERRO
+                )
         else:
-            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_NOK)
+            bot.send_message(
+                chat_id=update.message.chat_id,
+                text=message_handler.BOT_MSG_DESINSC_NOK
+            )
 
         # chats = utils.load_json('webapp/chats.json')
         # if update.message.chat_id not in chats['chat_id']:
         #     chats['chat_id'].append(update.message.chat_id)
         #     utils.write_json('webapp/chats.json', chats)
-        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_OK)
+        #     bot.send_message(chat_id=update.message.chat_id,
+        #       text=message_handler.BOT_MSG_JSON_INSC_OK)
         # else:
-        #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_JSON_INSC_NOK)
+        #     bot.send_message(chat_id=update.message.chat_id,
+        #       text=message_handler.BOT_MSG_JSON_INSC_NOK)
+
     except Exception as e:
         print(str(e))
 
     # chats = utils.load_json('webapp/chats.json')
     # if update.message.chat_id not in chats['chat_id']:
-    #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_OK)
+    #     bot.send_message(chat_id=update.message.chat_id,
+    #       text=message_handler.BOT_MSG_DESINSC_OK)
     # else:
     #     chats['chat_id'].remove(update.message.chat_id)
     #     utils.write_json('webapp/chats.json', chats)
-    #     bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_DESINSC_NOK)
+    #     bot.send_message(chat_id=update.message.chat_id,
+    #       text=message_handler.BOT_MSG_DESINSC_NOK)
 
 
 def menu_principal(bot, update):
@@ -107,10 +136,16 @@ def unknown(bot, update):
         for monitors in file['monitors']:
             if msg == monitors['friendly_name']:
                 found = True
-                bot.send_message(chat_id=update.message.chat_id, text=get_info_monitor(id=monitors['id']))
+                bot.send_message(
+                    chat_id=update.message.chat_id,
+                    text=get_info_monitor(id=monitors['id'])
+                )
 
         if not found:
-            bot.send_message(chat_id=update.message.chat_id, text=message_handler.BOT_MSG_UNKNOWN)
+            bot.send_message(
+                chat_id=update.message.chat_id,
+                text=message_handler.BOT_MSG_UNKNOWN
+            )
 
     except Exception as e:
         print(e)
@@ -118,8 +153,11 @@ def unknown(bot, update):
 
 def get_lista_monitores():
     try:
-        res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT, params=uptime_connect.PAYLOAD,
-                                           headers=uptime_connect.HEADERS)
+        res = utils.post_with_query_string(
+            url=uptime_connect.URL_CONNECT,
+            params=uptime_connect.PAYLOAD,
+            headers=uptime_connect.HEADERS
+        )
         if res.status_code == 200:
             parsed_json = json.loads(res.text)
             return parsed_json
@@ -134,8 +172,11 @@ def get_info_monitor(**kwargs):
     try:
         msg = ""
         payload = uptime_connect.PAYLOAD + '&monitors=%s' % kwargs['id']
-        res = utils.post_with_query_string(url=uptime_connect.URL_CONNECT,
-                                           params=payload, headers=uptime_connect.HEADERS)
+        res = utils.post_with_query_string(
+            url=uptime_connect.URL_CONNECT,
+            params=payload,
+            headers=uptime_connect.HEADERS
+        )
         if res.status_code == 200:
             parsed_json = json.loads(res.text)
 
@@ -147,22 +188,29 @@ def get_info_monitor(**kwargs):
                     msg += 'Status: ONLINE \n'
                 else:
                     msg += 'Status: OFFLINE \n'
-                msg += 'Desde: %s \n' % \
-                    (datetime.datetime.fromtimestamp(int(m.get('logs')[0].get('datetime')))
-                     .strftime('%d-%m-%Y %H:%M:%S'))
+                msg += 'Desde: %s \n' % (datetime.datetime.fromtimestamp(
+                    int(m.get('logs')[0].get('datetime'))
+                ).strftime('%d-%m-%Y %H:%M:%S'))
                 msg += '***************************************** \n'
 
             return msg
         else:
-            print('Retorno indevido do UptimeRobot. Detalhamento: %s' % res.text)
+            print(
+                'Retorno indevido do UptimeRobot. Detalhamento: %s' % res.text
+            )
 
     except Exception as ex:
-        print('Problema na conexão com o UptimeRobot para busca de Informações do Monitor. Detalhamento: %s ' % ex)
+        print(
+            'Problema na conexão com o UptimeRobot para busca de Informações \
+             do Monitor. Detalhamento: %s ' % ex)
 
 
 # Criacao do objeto updater #
 if app.config['PROXY_HABILITADO']:
-    updater = Updater(token=app.config['TELEGRAM_TOKEN'], request_kwargs={'proxy_url': app.config['PROXY_ADRESS']})
+    updater = Updater(
+        token=app.config['TELEGRAM_TOKEN'],
+        request_kwargs={'proxy_url': app.config['PROXY_ADRESS']}
+    )
 else:
     updater = Updater(token=app.config['TELEGRAM_TOKEN'])
 

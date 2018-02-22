@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# encoding: iso-8859-1
+
 from urllib import parse
 import psycopg2
 from webapp import app
@@ -34,7 +37,9 @@ def search_chats():
             return False
 
     except Exception as e:
-        app.logger.error('DatabaseAlerts - Não foi possivel realizar consulta ao BD')
+        app.logger.error(
+            'DatabaseAlerts - Não foi possivel realizar consulta ao BD'
+        )
         app.logger.error(str(e))
 
 
@@ -54,7 +59,9 @@ def search_chat_id(**kwargs):
             return False
 
     except Exception as e:
-        app.logger.error('DatabaseAlerts - Não foi possivel realizar consulta ao BD')
+        app.logger.error(
+            'DatabaseAlerts - Não foi possivel realizar consulta ao BD'
+        )
         app.logger.error(str(e))
 
 
@@ -62,10 +69,13 @@ def insert_chat(**kwargs):
     try:
         conn = connect_bd()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO chat (id, type, username, first_name, last_name) "
-                       "VALUES (%s,'%s','%s','%s','%s')" % (kwargs['chat_id'], kwargs['type'],
-                                                            kwargs['username'], kwargs['first_name'],
-                                                            kwargs['last_name']))
+        cursor.execute(
+            "INSERT INTO chat (id, type, username, first_name, last_name) "
+            "VALUES (%s,'%s','%s','%s','%s')" % (
+                kwargs['chat_id'], kwargs['type'], kwargs['username'],
+                kwargs['first_name'], kwargs['last_name']
+            )
+        )
 
         if cursor.rowcount != 0:
             conn.commit()
@@ -78,7 +88,9 @@ def insert_chat(**kwargs):
             return False
 
     except Exception as e:
-        app.logger.error('DatabaseAlerts - Não foi possivel incluir registro no BD')
+        app.logger.error(
+            'DatabaseAlerts - Não foi possivel incluir registro no BD'
+        )
         app.logger.error(str(e))
 
 
@@ -97,5 +109,7 @@ def remove_chat(**kwargs):
             return False
 
     except Exception as e:
-        app.logger.error('DatabaseAlerts - Não foi possivel remover registro no BD')
+        app.logger.error(
+            'DatabaseAlerts - Não foi possivel remover registro no BD'
+        )
         app.logger.error(str(e))

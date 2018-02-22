@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # encoding: iso-8859-1
 """ Filename:        controllers.py
-    Purpose:         Este arquivo � uma das possiveis views, que podem conter
+    Purpose:         Este arquivo e uma das possiveis views, que podem conter
                      rotas da aplicacao.
     Requirements:    Nao se aplica
     Author:          Humbertho Mattar
@@ -19,9 +19,10 @@ import datetime
 
 @app.route('/info/', methods=['GET', 'HEAD'])
 def info():
-
-    mensagem = {'nome da aplicacao': app.config['APP_NAME'],
-                'versao': app.config['VERSION']}
+    mensagem = {
+        'nome da aplicacao': app.config['APP_NAME'],
+        'versao': app.config['VERSION']
+    }
     return json.dumps(mensagem)
 
 
@@ -35,7 +36,8 @@ def uptime_robot_alerts():
             app.logger.error('schema erro: ' + str(v.errors))
             abort(400)
         else:
-            url = 'https://api.telegram.org/bot%s/sendMessage' % (app.config['TELEGRAM_TOKEN'])
+            url = 'https://api.telegram.org/bot%s/sendMessage'
+            url = url % (app.config['TELEGRAM_TOKEN'])
             text = 'DTP_MONITOR :: Informa\n\n'
             text += 'Sistema: %s\n' % request.args['monitorFriendlyName']
             text += 'URL: %s\n' % request.args['monitorURL']
@@ -43,42 +45,52 @@ def uptime_robot_alerts():
                 text += 'Status atual: OFFLINE\n'
             else:
                 text += 'Status atual: ONLINE\n'
-            text += 'Desde de: %s\n' % datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            text += 'Desde de: %s\n' % (
+                datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            )
             text += 'Detalhes: %s' % request.args['alertDetails'].upper()
-
             rows = database.search_chats()
             if rows:
                 for row in rows:
-                    req = utils.post_with_query_string(url=url, params={'chat_id': row, 'text': text}, headers=headers)
+                    req = utils.post_with_query_string(
+                        url=url,
+                        params={'chat_id': row, 'text': text},
+                        headers=headers
+                    )
                     app.logger.info(req.text)
                 return 'OK', 200
             else:
                 return 'OK', 204
     except Exception as e:
-        app.logger.error('uptimeRobotAlerts - N�o foi possivel enviar a mensagem.')
+        app.logger.error(
+            'uptimeRobotAlerts - Não foi possivel enviar a mensagem.'
+        )
         app.logger.error(str(e))
         abort(400)
 
 
 @app.errorhandler(400)
 def bad_request(e):
-    mensagem = {'status code': 400,
-                'message': 'bad request'
-                }
+    mensagem = {
+        'status code': 400,
+        'message': 'bad request'
+    }
     return json.dumps(mensagem), 400
 
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    mensagem = {'status code': 500,
-                'message': 'internal server error'
-                }
+    mensagem = {
+        'status code': 500,
+        'message': 'internal server error'
+    }
     return json.dumps(mensagem), 500
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    mensagem = {'status code': 404,
-                'message': 'page not found'
-                }
+    mensagem = {
+        'status code': 404,
+        'message': 'page not found'
+    }
     return json.dumps(mensagem), 404
