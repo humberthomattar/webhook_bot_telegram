@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # encoding: iso-8859-1
 """ Filename:        controllers.py
-    Purpose:         Este arquivo é uma das possiveis views, que podem conter
+    Purpose:         Este arquivo ï¿½ uma das possiveis views, que podem conter
                      rotas da aplicacao.
     Requirements:    Nao se aplica
     Author:          Humbertho Mattar
@@ -55,13 +55,13 @@ def uptime_robot_alerts():
             else:
                 return 'OK', 204
     except Exception as e:
-        app.logger.error('uptimeRobotAlerts - Não foi possivel enviar a mensagem.')
+        app.logger.error('uptimeRobotAlerts - Nï¿½o foi possivel enviar a mensagem.')
         app.logger.error(str(e))
         abort(400)
 
 
 @app.errorhandler(400)
-def bad_request():
+def bad_request(e):
     mensagem = {'status code': 400,
                 'message': 'bad request'
                 }
@@ -69,7 +69,7 @@ def bad_request():
 
 
 @app.errorhandler(500)
-def internal_server_error():
+def internal_server_error(e):
     mensagem = {'status code': 500,
                 'message': 'internal server error'
                 }
@@ -77,7 +77,7 @@ def internal_server_error():
 
 
 @app.errorhandler(404)
-def page_not_found():
+def page_not_found(e):
     mensagem = {'status code': 404,
                 'message': 'page not found'
                 }
