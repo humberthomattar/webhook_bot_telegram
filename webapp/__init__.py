@@ -17,9 +17,8 @@ app = Flask(__name__)
 # configuracoees externalizadas - classes de conf/config.py
 app.config.from_object('webapp.config.DevelopmentConfig')
 
-
 # A importacaoo de mýdulos de visualizaýýes DEVE SER no final do arquivo para
 # evitar problemas  relacionados a importaýýes circulares.
 
-# noinspection PyPep8
-import webapp.controllers
+
+import webapp.controllers  # noqa
