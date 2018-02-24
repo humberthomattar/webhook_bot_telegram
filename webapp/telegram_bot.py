@@ -181,7 +181,7 @@ def get_info_monitor(**kwargs):
             parsed_json = json.loads(res.text)
 
             for m in parsed_json['monitors']:
-                msg = '****************************************** \n'
+                msg += 'DTP MONITOR :: INFORMA'
                 msg += 'Sistema: %s \n' % (m['friendly_name'])
                 msg += 'URL: %s \n' % (m['url'])
                 if m.get('logs')[0].get('type') == 2:
@@ -191,7 +191,6 @@ def get_info_monitor(**kwargs):
                 msg += 'Desde: %s \n' % (datetime.datetime.fromtimestamp(
                     int(m.get('logs')[0].get('datetime'))
                 ).strftime('%d-%m-%Y %H:%M:%S'))
-                msg += '***************************************** \n'
 
             return msg
         else:

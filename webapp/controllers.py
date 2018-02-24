@@ -38,7 +38,7 @@ def uptime_robot_alerts():
         else:
             url = 'https://api.telegram.org/bot%s/sendMessage'
             url = url % (app.config['TELEGRAM_TOKEN'])
-            text = 'DTP_MONITOR :: Informa\n\n'
+            text = 'DTP_MONITOR :: INFORMA\n\n'
             text += 'Sistema: %s\n' % request.args['monitorFriendlyName']
             text += 'URL: %s\n' % request.args['monitorURL']
             if request.args['alertType'] == '1':
