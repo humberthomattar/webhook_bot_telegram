@@ -30,6 +30,8 @@ def inscrever(bot, update):
                     text=message_handler.BOT_MSG_INSC_OK
                 )
             else:
+                app.logger.error("DatabaseAlerts - NÃ£o foi possivel realizar inscrição no BD. ChatId: %s"
+                                 % update.message.chat_id)
                 bot.send_message(
                     chat_id=update.message.chat_id,
                     text=message_handler.BOT_MSG_INSC_ERRO
