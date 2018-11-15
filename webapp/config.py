@@ -21,7 +21,8 @@ class BaseConfig(object):
     LOG_FILENAME = 'webapp/log/log_%s.log' % APP_NAME
     LOG_LEVEL = 'INFO'  # DEBUG OU INFO
     DATABASE_URL = os.environ['DATABASE_URL']
-
+    RETRY_TIMES = int(os.environ['RETRY_TIMES'])
+    RETRY_SECONDS = int(os.environ['RETRY_SECONDS'])
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
@@ -33,7 +34,8 @@ class DevelopmentConfig(BaseConfig):
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO
     DATABASE_URL = os.environ['DATABASE_URL']
-
+    RETRY_TIMES = int(os.environ['RETRY_TIMES'])
+    RETRY_SECONDS = int(os.environ['RETRY_SECONDS'])
 
 class TestingConfig(BaseConfig):
     DEBUG = False
@@ -45,3 +47,5 @@ class TestingConfig(BaseConfig):
     PROXY_HABILITADO = bool(os.environ['PROXY_HABILITADO'])
     LOG_LEVEL = 'DEBUG'  # DEBUG OU INFO
     DATABASE_URL = os.environ['DATABASE_URL']
+    RETRY_TIMES = int(os.environ['RETRY_TIMES'])
+    RETRY_SECONDS = int(os.environ['RETRY_SECONDS'])

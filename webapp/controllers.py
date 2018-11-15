@@ -14,6 +14,7 @@ from webapp import app
 from webapp import schemas
 from webapp import utils
 from webapp import database
+from webapp import telegram_bot
 import datetime
 
 
@@ -36,29 +37,41 @@ def uptime_robot_alerts():
             app.logger.error('schema erro: ' + str(v.errors))
             abort(400)
         else:
-            url = 'https://api.telegram.org/bot%s/sendMessage'
-            url = url % (app.config['TELEGRAM_TOKEN'])
-            text = 'DTP_MONITOR :: INFORMA\n\n'
-            text += 'Sistema: %s\n' % request.args['monitorFriendlyName']
-            text += 'URL: %s\n' % request.args['monitorURL']
-            if request.args['alertType'] == '1':
-                text += 'Status atual: OFFLINE\n'
-            else:
-                text += 'Status atual: ONLINE\n'
-            text += 'Desde de: %s\n' % (
-                datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-            )
-            text += 'Detalhes: %s' % request.args['alertDetails'].upper()
-            rows = database.search_chats()
-            if rows:
-                for row in rows:
-                    req = utils.post_with_query_string(
-                        url=url,
-                        params={'chat_id': row, 'text': text},
-                        headers=headers
-                    )
-                    app.logger.info(req.text)
-                return 'OK', 200
+            sendmessage = 0
+            alertType = int(request.args['alertType'])
+            if alertType == 1:
+                alertType = telegram_bot.retry_status_monitor(monitorID=request.args['monitorID'])
+                if alertType == 1:
+                    sendmessage = 0
+                else:
+                    sendmessage = 1
+
+            if sendmessage == 0:
+                url = 'https://api.telegram.org/bot%s/sendMessage'
+                url = url % (app.config['TELEGRAM_TOKEN'])
+                text = 'DTP_MONITOR :: INFORMA\n\n'
+                text += 'Sistema: %s\n' % request.args['monitorFriendlyName']
+                text += 'URL: %s\n' % request.args['monitorURL']
+                if alertType == 1:
+                    text += 'Status atual: OFFLINE\n'
+                else:
+                    text += 'Status atual: ONLINE\n'
+                text += 'Desde de: %s\n' % (
+                    datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+                )
+                text += 'Detalhes: %s' % request.args['alertDetails'].upper()
+                rows = database.search_chats()
+                if rows:
+                    for row in rows:
+                        req = utils.post_with_query_string(
+                            url=url,
+                            params={'chat_id': row, 'text': text},
+                            headers=headers
+                        )
+                        app.logger.info(req.text)
+                    return 'OK', 200
+                else:
+                    return 'OK', 204
             else:
                 return 'OK', 204
     except Exception as e:

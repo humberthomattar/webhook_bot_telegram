@@ -8,6 +8,7 @@ from telegram.ext import CommandHandler
 from webapp import uptime_connect
 import json
 import datetime
+import time
 
 
 def start(bot, update):
@@ -205,6 +206,35 @@ def get_info_monitor(**kwargs):
             'Problema na conexão com o UptimeRobot para busca de Informações \
              do Monitor. Detalhamento: %s ' % ex)
 
+def get_status_monitor(**kwargs):
+    try:
+        payload = uptime_connect.PAYLOAD + '&monitors=%s' % kwargs['id']
+        res = utils.post_with_query_string(
+            url=uptime_connect.URL_CONNECT,
+            params=payload,
+            headers=uptime_connect.HEADERS
+        )
+        if res.status_code == 200:
+            parsed_json = json.loads(res.text)
+            for m in parsed_json['monitors']:
+                return m.get('logs')[0].get('type')
+        else:
+            print(
+                'Retorno indevido do UptimeRobot. Detalhamento: %s' % res.text
+            )
+
+    except Exception as ex:
+        print(
+            'Problema na conexão com o UptimeRobot para busca de Informações \
+             do Monitor. Detalhamento: %s ' % ex)
+
+def retry_status_monitor(**kwargs):
+    count = 0
+    while count < app.config['RETRY_TIMES']:
+        time.sleep(app.config['RETRY_SECONDS'])
+        get_status_monitor(id=kwargs['monitorID'])
+        count+=1
+    return get_status_monitor(id=kwargs['monitorID'])
 
 # Criacao do objeto updater #
 if app.config['PROXY_HABILITADO']:
