@@ -21,6 +21,8 @@ export TELEGRAM_TOKEN=<valor>
 export PROXY_ADRESS=<valor>
 export PROXY_HABILITADO=<valor>
 export DATABASE_URL=<valor>
+export RETRY_TIMES=<valor>
+export RETRY_SECONDS=<valor>
 
 print_info "Variaveis definidas."
 
