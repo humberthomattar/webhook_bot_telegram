@@ -20,6 +20,8 @@ unset UPTIMEROBOT_TOKEN
 unset TELEGRAM_TOKEN
 unset PROXY_ADRESS
 unset PROXY_HABILITADO
+unset RETRY_TIMES
+unset RETRY_SECONDS
 
 print_info "Variaveis removidas."
 
