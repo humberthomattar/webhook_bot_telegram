@@ -9,6 +9,6 @@ install:
 before_install:
   - pip install pep8 pytest Flask-Testing
 script:
-  - py.test -v
+  - py.test
 after_script:
   - pep8 --statistics --count webapp/
