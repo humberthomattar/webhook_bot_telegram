@@ -53,11 +53,5 @@ class ControllersTest(TestCase):
         req = self.client.get('/uptimeRobotAlerts')
         assert req.status_code == 301
 
-    def test_uptimeRobotAlerts_without_params(self):
-        req = self.client.get('/uptimeRobotAlerts/')
-        assert req.status_code == 400
-        assert b"bad request" in req.data
-
-
 if __name__ == '__main__':
     unittest.main(verbosity=2)
