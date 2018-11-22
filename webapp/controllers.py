@@ -16,6 +16,7 @@ from webapp import utils
 from webapp import database
 from webapp import telegram_bot
 import datetime
+import os
 
 
 @app.route('/info/', methods=['GET', 'HEAD'])
@@ -46,7 +47,12 @@ def uptime_robot_alerts():
                 else:
                     sendmessage = 1
             elif alertType == 2:
-                sendmessage = telegram_bot.verify_downtime(monitorID=request.args['monitorID'])
+                retrys = int(os.environ['RETRY_TIMES']) * int(os.environ['RETRY_SECONDS'])
+                if int(request.args['alertDuration']) > retrys:
+                    sendmessage = 0
+                else:
+                    sendmessage = 1
+                # sendmessage = telegram_bot.verify_downtime(monitorID=request.args['monitorID'])
 
             if sendmessage == 0:
                 url = 'https://api.telegram.org/bot%s/sendMessage'
