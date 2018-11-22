@@ -130,7 +130,7 @@ FORMAT = "json"
 PAYLOAD = "api_key="+os.environ['UPTIMEROBOT_TOKEN']+"&"
 PAYLOAD += "format="+FORMAT+"&"
 PAYLOAD += "logs=1&"
-PAYLOAD += "logs_limit=1&"
+# PAYLOAD += "logs_limit="+LOGS_LIMIT+"&"
 PAYLOAD += "timezone=1"
 
 # VARIABLE HEADERS have this value always
