@@ -9,7 +9,6 @@ from webapp import uptime_connect
 import json
 import datetime
 import time
-import os
 
 
 def start(bot, update):
@@ -241,37 +240,6 @@ def retry_status_monitor(**kwargs):
         else:
             count += 1
     return get_status_monitor(id=kwargs['monitorID'])
-
-
-def verify_downtime(**kwargs):
-    try:
-        payload = uptime_connect.PAYLOAD + '&logs_limit=1&monitors=%s' % kwargs['monitorID']
-        res = utils.post_with_query_string(
-            url=uptime_connect.URL_CONNECT,
-            params=payload,
-            headers=uptime_connect.HEADERS
-        )
-        print(res)
-        if res.status_code == 200:
-            retrys = int(os.environ['RETRY_TIMES']) * int(os.environ['RETRY_SECONDS'])
-            parsed_json = json.loads(res.text)
-            for m in parsed_json['monitors']:
-                if int(m.get('logs')[0].get('duration')) > retrys:
-                    return 0
-                else:
-                    return 1
-        else:
-            print(
-                'Retorno indevido do UptimeRobot. Detalhamento: %s' % res.text
-            )
-
-    except Exception as ex:
-        print(
-            'Problema na conexão com o UptimeRobot para busca de Informações \
-             do Monitor. Detalhamento: %s ' % ex)
-
-
-
 
 
 # Criacao do objeto updater
