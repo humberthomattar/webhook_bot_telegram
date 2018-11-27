@@ -48,7 +48,7 @@ def uptime_robot_alerts():
                     sendmessage = 1
             elif alertType == 2:
                 retrys = int(os.environ['RETRY_TIMES']) * int(os.environ['RETRY_SECONDS'])
-                if int(request.args['alertDuration']) > retrys:
+                if int(request.args['alertDuration']) >= retrys:
                     sendmessage = 0
                 else:
                     sendmessage = 1
